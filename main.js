@@ -19,6 +19,24 @@ console.log(attrMap.get('margin-top'));`,
   }`,
       html: `<div class="box"></div>`
     }
+  },
+  'props': {
+    'Properties & Values API': {
+      name: 'Properties & Values API',
+      features: ['Configurable, animatable css variables (custom properties)'],
+      js: `try {
+  CSS.registerProperty({
+    name: ''
+  })
+} catch (e) { alert(e); }`,
+      css: `.box {
+    background: slategray;
+    margin: 0 auto;
+    height: 100px;
+    width: 100%;
+  }`,
+      html: `<div class="box"></div>`
+    }
   }
 };
 
