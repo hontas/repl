@@ -4,6 +4,7 @@ if (CSS.paintWorklet) {
   CSS.paintWorklet.addModule('./repl/paint-switcher.js');
 }
 
+const runCodeTimeout = 1500;
 const debounce = (fn, wait = 1) => {
   let timeoutId;
   return (...args) => {
@@ -134,6 +135,7 @@ export default class {
 
   resetEditors(base) {
     const selected = this.options[base];
+    this.showConsole = selected.console || false;
 
     this.repl.title.innerText = selected.name;
     this.repl.features.innerText = selected.features.join(', ');
@@ -178,7 +180,6 @@ export default class {
     const self = this;
 
     return function(e) {
-      console.log(self.repl);
       const target = e.target;
       const switchType = target.getAttribute('data-type');
 
@@ -198,6 +199,7 @@ export default class {
     const repl = this.repl;
     const parent = this.parent;
     const type = this.type;
+    const showConsole = this.showConsole;
 
     return debounce(function() {
       // console.clear();
@@ -210,6 +212,21 @@ export default class {
 
       // Build HTML
       let html = `<head><style>${vals.css}</style>`;
+      if (showConsole) html += `<style>
+pre.console {
+  background: #272821;
+  margin: 0;
+  padding: .5em;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+pre.console code {
+  color: whitesmoke;
+  font-size: 3vw;
+  white-space: normal;
+}
+</style>`;
 
       // Only include JS directly if we're doing Custom Properties
       if (type === 'props') {
@@ -246,7 +263,19 @@ export default class {
         </head>`;
       }
 
-      html += `<body>${vals.html}</body>`;
+      html += `<body>${vals.html}`;
+      if (showConsole) html += `<pre class="console" hidden><code id="console_output"></code></pre>`;
+      if (showConsole) html += `<script>
+const pre = document.querySelector('.console');
+const code = document.getElementById('console_output');
+console.log = printToConsole;
+function printToConsole(msg) {
+  pre.hidden = !msg;
+  code.textContent = msg;
+}
+window.onerror = (e) => printToConsole(e.toString().replace('Uncaught ', ''));
+</script>`;
+      html += `</body>`;
 
       // Load it in
       window.requestAnimationFrame(() => {
@@ -262,6 +291,6 @@ export default class {
 
         repl.previous = preview;
       });
-    }, 1000);
+    }, runCodeTimeout);
   }
 }

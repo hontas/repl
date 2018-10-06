@@ -12,7 +12,7 @@ const attrMap = el.attributeStyleMap;
 console.log(styleMap.get('margin-top'));
 console.log(attrMap.get('margin-top'));`,
       css: `.box {
-    background: slategray;
+    background: var(--bg-color, slategray);
     margin: 0 auto;
     height: 100px;
     width: 100%;
@@ -22,19 +22,20 @@ console.log(attrMap.get('margin-top'));`,
   },
   'props': {
     'Properties & Values API': {
+      type: 'props',
+      console: true,
       name: 'Properties & Values API',
       features: ['Configurable, animatable css variables (custom properties)'],
-      js: `try {
-  CSS.registerProperty({
-    name: ''
-  })
-} catch (e) { alert(e); }`,
+      js: `CSS.registerProperty({
+  name: '',
+  syntax: '*'
+});`,
       css: `.box {
-    background: slategray;
-    margin: 0 auto;
-    height: 100px;
-    width: 100%;
-  }`,
+  background: var(--bg-color, slategray);
+  margin: 0 auto;
+  height: 100px;
+  width: 100%;
+}`,
       html: `<div class="box"></div>`
     }
   }
@@ -44,5 +45,5 @@ const setting = new URL(location).searchParams.get('setting');
 if (!setting || !settings[setting]) {
   console.warn(`?setting=${setting} is NOT valid. Must be one of: "${Object.keys(settings)}"`);
 } else {
-  new REPL('#repl', settings[setting]);
+  new REPL('#repl', settings[setting], settings[setting].type);
 }
