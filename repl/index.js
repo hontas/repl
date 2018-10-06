@@ -262,6 +262,6 @@ export default class {
 
         repl.previous = preview;
       });
-    }, 500);
+    }, 1000);
   }
 }
