@@ -246,10 +246,7 @@ pre.console code {
         <script>
           const pre = document.querySelector('.console');
           const code = document.getElementById('console_output');
-          console.dir(pre);
-          console.dir(code);
           function printToConsole(msg) {
-            console.error(msg);
             pre.hidden = !msg;
             code.textContent = msg;
           }
