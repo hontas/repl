@@ -20,11 +20,11 @@ console.log(attrMap.get('margin-top'));`,
       html: `<div class="box"></div>`
     }
   },
-  'props': {
+  'registerProperty': {
     'Properties & Values API': {
       type: 'props',
       console: true,
-      name: 'Properties & Values API',
+      name: 'CSS.registerProperty',
       features: ['Configurable, animatable css variables (custom properties)'],
       js: `CSS.registerProperty({
   name: '',
@@ -35,6 +35,32 @@ console.log(attrMap.get('margin-top'));`,
   margin: 0 auto;
   height: 100px;
   width: 100%;
+}`,
+      html: `<div class="box"></div>`
+    }
+  },
+  'animateProperty': {
+    'animate property': {
+      type: 'props',
+      console: true,
+      name: 'Properties & Values API',
+      features: ['Configurable, animatable css variables (custom properties)'],
+      js: `CSS.registerProperty({
+  name: '--bg-col',
+  inherits: true,
+  syntax: '<color>',
+  initialValue: 'coral'
+});`,
+      css: `.box {
+  --bg-color: slategray;
+  background: var(--bg-color);
+  margin: 0 auto;
+  height: 100px;
+  width: 100%;
+  transition: background 1s;
+}  
+.box:hover {
+  --bg-color: cornflowerblue;
 }`,
       html: `<div class="box"></div>`
     }
