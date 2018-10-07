@@ -17,12 +17,12 @@ const worklets = ['layout', 'paint', 'animation'];
 const isWorklet = (type) => worklets.includes(type);
 
 export default class {
-  constructor(target, options, type) {
+  constructor(target, options) {
     this.target = target;
     this.parent = document.querySelector(target) ;
     this.options = options;
-    this.type = type;
     this.optKeys = Object.keys(options);
+    this.type = options[this.optKeys[0]].type;
     this.inputEvent = new Event(`input`, {
       bubbles: true,
       cancelable: true,
@@ -257,6 +257,7 @@ pre.console code {
 
           async function init() {
             await CSS.${type}Worklet.addModule(blobWorklet());
+            console.log('loaded worklet');
 
             ${vals.js}
           }
@@ -279,7 +280,6 @@ pre.console code {
       if (showConsole) html += `<script>
 const pre = document.querySelector('.console');
 const code = document.getElementById('console_output');
-console.log = printToConsole;
 function printToConsole(msg) {
   pre.hidden = !msg;
   code.textContent = msg;
