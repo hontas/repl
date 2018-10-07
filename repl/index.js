@@ -221,6 +221,8 @@ export default class {
         vals[editor] = repl.editors[editor].value;
       }
 
+      const getJS = () => showConsole ? `try {${vals.js}} catch(e) {printToConsole(e)}` : vals.js;
+
       // Build HTML
       let html = `<head><style>${vals.css}</style>`;
       if (showConsole) html += `<style>
@@ -239,9 +241,22 @@ pre.console code {
 }
 </style>`;
 
+      html += `</head><body>`;
+      if (showConsole) html += `<pre class="console" hidden><code id="console_output"></code></pre>
+        <script>
+          const pre = document.querySelector('.console');
+          const code = document.getElementById('console_output');
+          function printToConsole(msg) {
+            pre.hidden = !msg;
+            code.textContent = msg;
+          }
+        </script>`;
+      html += `${vals.html}`;
+      html += `</body>`;
+
       // Only include JS directly if we're doing Custom Properties
       if (type === 'props') {
-        html += `<script type="text/javascript">${vals.js}</script></head>`;
+        html += `<script type="text/javascript">${getJS()}</script></head>`;
       } else if (isWorklet(type)) {
         html += `<script language="worklet">
             ${vals.worklet}
@@ -259,34 +274,20 @@ pre.console code {
             await CSS.${type}Worklet.addModule(blobWorklet());
             console.log('loaded worklet');
 
-            ${vals.js}
+            ${getJS()}
           }
 
           init();
 
-          </script>
-        </head>`;
+          </script>`;
       } else {
         html += `<script type="module">
           window.addEventListener('DOMContentLoaded', () => {
-            ${vals.js}
+            ${getJS()}
           });         
           </script>
         </head>`;
       }
-
-      html += `<body>${vals.html}`;
-      if (showConsole) html += `<pre class="console" hidden><code id="console_output"></code></pre>`;
-      if (showConsole) html += `<script>
-const pre = document.querySelector('.console');
-const code = document.getElementById('console_output');
-function printToConsole(msg) {
-  pre.hidden = !msg;
-  code.textContent = msg;
-}
-window.onerror = (e) => printToConsole(e.toString().replace('Uncaught ', ''));
-</script>`;
-      html += `</body>`;
 
       // Load it in
       window.requestAnimationFrame(() => {
