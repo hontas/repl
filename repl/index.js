@@ -47,6 +47,12 @@ export default class {
     const jsEditor = document.createElement('div');
     const cssEditor = document.createElement('div');
     const htmlEditor = document.createElement('div');
+    const editorElmnts = {
+      worklet: workletEditor,
+      js: jsEditor,
+      css: cssEditor,
+      html: htmlEditor
+    };
 
     menu.classList.add('repl--menu');
     replTitle.classList.add('repl--title');
@@ -76,8 +82,12 @@ export default class {
     }
 
     // Worklet Edits
+    const selected = this.options[this.active].selectedEditor;
     if (isWorklet(this.type)) {
       workletEditor.style.zIndex = 100;
+    } else if (selected && editorElmnts[selected]) {
+      editorElmnts[selected].style.zIndex = 100;
+      this.switcherOptions.shift();
     } else {
       jsEditor.style.zIndex = 100;
       this.switcherOptions.shift();
@@ -86,6 +96,7 @@ export default class {
     // Build Switcher
     for (const key of this.switcherOptions) {
       const so = document.createElement('option');
+      so.selected = selected === key;
       so.value = key;
       so.text = key;
       replSwitcher.appendChild(so);
@@ -99,7 +110,7 @@ export default class {
     this.parent.appendChild(replTitle);
     this.parent.appendChild(replFeatures);
     this.parent.appendChild(replSwitcher);
-    if (this.type !== 'props') {
+    if (isWorklet(this.type)) {
       this.parent.appendChild(workletEditor);
     }
     this.parent.appendChild(jsEditor);
@@ -119,7 +130,7 @@ export default class {
       html: htmlEditor.querySelector('.editor--textarea'),
     }
 
-    if (this.type === 'props') {
+    if (!isWorklet(this.type)) {
       delete editors.worklet;
     }
 

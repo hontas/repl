@@ -42,6 +42,7 @@ console.log(attrMap.get('margin-top'));`,
   'animateProperty': {
     'animate property': {
       type: 'props',
+      selectedEditor: 'css',
       console: true,
       name: 'Properties & Values API',
       features: ['Configurable, animatable css variables (custom properties)'],
