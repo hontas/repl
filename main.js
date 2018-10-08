@@ -3,7 +3,7 @@ import REPL from './repl/index.js';
 import typedOm from './settings/typed-om.js';
 import animateProperty from './settings/animateProperty.js';
 import registerProperty from './settings/registerProperty.js';
-import tooltip from './settings/tooltip.js';
+import paintWorklet from './settings/paintWorklet.js';
 import animationWorklet from './settings/animationWorklet.js';
 import layoutWorklet from './settings/layoutWorklet.js';
 
@@ -11,7 +11,7 @@ const settings = {
   typedOm,
   animateProperty,
   registerProperty,
-  tooltip,
+  paintWorklet,
   animationWorklet,
   layoutWorklet
 };

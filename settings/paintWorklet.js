@@ -1,5 +1,5 @@
 export default {
-  tooltip: {
+  paintWorklet: {
     type: 'paint',
     console: true,
     name: 'Paint API',
