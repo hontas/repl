@@ -125,7 +125,10 @@ const tooltip = document.querySelector('.tooltip');
 }
 
 /* controls */
-body { font-family: system-ui }
+body {
+  color: white;
+  font-family: system-ui
+}
 label {
   display: block;
 }`,
