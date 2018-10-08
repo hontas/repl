@@ -24,6 +24,7 @@ console.log(attrMap.get('margin-top'));`,
     'Properties & Values API': {
       type: 'props',
       console: true,
+      selectedEditor: 'css',
       name: 'CSS.registerProperty',
       features: [],
       js: `CSS.registerProperty({
