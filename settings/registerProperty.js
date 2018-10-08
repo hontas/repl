@@ -15,7 +15,6 @@ syntax: '*'
 
 .box {
 background: var(--bg-color, slategray);
-margin: 0 auto;
 height: 100px;
 width: 100%;
 }`,
