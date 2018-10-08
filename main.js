@@ -97,6 +97,7 @@ CSS.registerProperty({
   initialValue: '0px'
 });
 
+// controls
 const tooltip = document.querySelector('.tooltip');
 ['tooltip-position', 'tooltip-size', 'border-width'].forEach((prop) => {
   const el = document.getElementById(prop);
@@ -107,24 +108,25 @@ const tooltip = document.querySelector('.tooltip');
 });
 `,
       css: `.tooltip {
-  display: inline-block;
-  font: 3em system-ui;
-  color: #fff;
-  margin-bottom: var(--border-width);
-  padding: 0.5em;
-  border-radius: 10px;
+  --tooltip-position: 30%;
+  --tooltip-size: 30px;
+  --border-width: 20px;
   background: hsl(193, 100%, 30%);
   border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
   border-image-source: paint(tooltip);
   border-image-slice: 0 0 100% 0;
   border-image-width: var(--border-width);
   border-image-outset: var(--border-width);
-  --tooltip-position: 30%;
-  --tooltip-size: 30px;
-  --border-width: 20px;
+  color: #fff;
+  display: inline-block;
+  font-size: 3em;
+  margin-bottom: var(--border-width);
+  padding: 0.5em;
 }
-input[type=range] {
+
+/* controls */
+body { font-family: system-ui }
+label {
   display: block;
 }`,
       worklet: `registerPaint('tooltip', class {
@@ -141,7 +143,6 @@ input[type=range] {
     const positionPercent = props.get('--tooltip-position').value;
     const position = geom.width * positionPercent / 100;
     const size = props.get('--tooltip-size').value;
-    console.log(geom, color);
 
     ctx.beginPath();
     ctx.moveTo(position - size, 0);
@@ -155,47 +156,20 @@ input[type=range] {
   }
 })`,
       html: `<div class="tooltip">I'm a tooltip</div>
-<div>
-  <input type="range" value="30" id="tooltip-position" data-unit="%" min="12" max="88" />
+
+<!-- controls -->
+<label>
+  <input type="range" value="30" id="tooltip-position" data-unit="%" />
+  --tooltip-position
+</label>
+<label>
   <input type="range" value="30" id="tooltip-size" data-unit="px" />
+  --tooltip-size
+</label>
+<label>
   <input type="range" value="20" id="border-width" data-unit="px" />
-</div>`,
-    },
-    circle: {
-      type: 'paint',
-      name: '',
-      features: [],
-      worklet: `registerPaint('circle', class {
-  static get inputProperties() { return ['--circle-color']; }
-  paint(ctx, size, properties) {
-    // Get fill color from property
-    const color = properties.get('--circle-color');
-
-    // Determine the center point and radius.
-    const xCircle = size.width / 2;
-    const yCircle = size.height / 2;
-    const radiusCircle = Math.min(xCircle, yCircle) - 2.5;
-
-    // Draw the circle o/
-    ctx.beginPath();
-    ctx.arc(xCircle, yCircle, radiusCircle, 0, 2 * Math.PI);
-    ctx.fillStyle = color;
-    ctx.fill();
-  }
-});`,
-      js: `CSS.registerProperty({
-  name: '--circle-color',
-  syntax: '<color>',
-  inherits: true,
-  initialValue: 'red',
-});`,
-      css: `.circle {
-  --circle-color: green;
-  background-image: paint(circle);
-  height: 80vh;
-  width: 100vw;
-}`,
-      html: `<div class="circle"></div>`
+  --border-width
+</label>`,
     }
   }
 };
