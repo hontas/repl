@@ -31,13 +31,18 @@ console.log(attrMap.get('margin-top'));`,
   name: '',
   syntax: '*'
 });`,
-      css: `.box {
+      css: `.container {
+
+}
+.box {
   background: var(--bg-color, slategray);
   margin: 0 auto;
   height: 100px;
   width: 100%;
 }`,
-      html: `<div class="box"></div>`
+      html: `<div class="container">
+  <div class="box"></div>
+</div>`
     }
   },
   animateProperty: {
