@@ -97,6 +97,7 @@ CSS.registerProperty({
   initialValue: '0px'
 });
 
+
 // controls
 const tooltip = document.querySelector('.tooltip');
 ['tooltip-position', 'tooltip-size', 'border-width'].forEach((prop) => {
@@ -117,12 +118,12 @@ const tooltip = document.querySelector('.tooltip');
   border-image-slice: 0 0 100% 0;
   border-image-width: var(--border-width);
   border-image-outset: var(--border-width);
-  color: #fff;
   display: inline-block;
   font-size: 3em;
   margin-bottom: var(--border-width);
   padding: 0.5em;
 }
+
 
 /* controls */
 body {
@@ -159,6 +160,7 @@ label {
   }
 })`,
       html: `<div class="tooltip">I'm a tooltip</div>
+
 
 <!-- controls -->
 <label>
