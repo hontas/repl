@@ -1,15 +1,13 @@
 export default {
-  'Properties & Values API': {
-    type: 'props',
-    console: true,
-    selectedEditor: 'css',
-    name: 'CSS.registerProperty',
-    features: [],
-    js: `CSS.registerProperty({
+  console: true,
+  selectedEditor: 'css',
+  name: 'CSS.registerProperty',
+  features: [],
+  js: `CSS.registerProperty({
   name: '',
   syntax: '*'
 });`,
-    css: `:root {
+  css: `:root {
 
 }
 
@@ -18,6 +16,5 @@ export default {
   height: 100px;
   width: 100%;
 }`,
-    html: `<div class="box"></div>`
-  }
+  html: `<div class="box"></div>`
 };

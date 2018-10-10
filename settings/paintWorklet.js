@@ -1,10 +1,8 @@
 export default {
-  paintWorklet: {
-    type: 'paint',
-    console: true,
-    name: 'Paint API',
-    features: [],
-    js: `CSS.registerProperty({
+  type: 'paint',
+  console: true,
+  name: 'Paint API',
+  js: `CSS.registerProperty({
   name: '--tooltip-position',
   inherits: false,
   syntax: '<percentage>',
@@ -34,7 +32,7 @@ const tooltip = document.querySelector('.tooltip');
   });
 });
 `,
-    css: `.tooltip {
+  css: `.tooltip {
   --tooltip-position: 30%;
   --tooltip-size: 30px;
   --border-width: 20px;
@@ -59,7 +57,7 @@ body {
 label {
   display: block;
 }`,
-    worklet: `registerPaint('tooltip', class {
+  worklet: `registerPaint('tooltip', class {
 static get inputProperties() {
   return [
     'background-color',
@@ -85,7 +83,7 @@ paint(ctx, geom, styleMap) {
   ctx.fill();
 }
 })`,
-    html: `<div class="tooltip">I'm a tooltip</div>
+  html: `<div class="tooltip">I'm a tooltip</div>
 
 
 <!-- controls -->
@@ -100,6 +98,5 @@ paint(ctx, geom, styleMap) {
 <label>
   <input type="range" value="20" id="border-width" data-unit="px" />
   --border-width
-</label>`,
-  }
+</label>`
 };

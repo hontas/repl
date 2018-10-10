@@ -16,9 +16,18 @@ const settings = {
   layoutWorklet
 };
 
+const empty = {
+  'empty': {
+    console: true,
+    js: ``,
+    css: ``,
+    html: ``
+  }
+};
+
 const setting = new URL(location).searchParams.get('setting');
 if (!setting || !settings[setting]) {
   console.warn(`?setting=${setting} is NOT valid. Must be one of: "${Object.keys(settings)}"`);
-} else {
-  new REPL('#repl', settings[setting]);
 }
+
+new REPL('#repl', settings[setting] || empty);

@@ -1,18 +1,16 @@
 export default {
-  animation: {
-    type: 'animation',
-    console: true,
-    name: 'AnimationWorklet',
-    features: [],
-    html: `<div id="my-elem">Hello World</div>`,
-    css: `body {
+  type: 'animation',
+  console: true,
+  name: 'AnimationWorklet',
+  html: `<div id="my-elem">Hello World</div>`,
+  css: `body {
   height: 200%;
 }  
   
 #my-elem {
   position: fixed;
 }`,
-    js: `// Element we want to animate
+  js: `// Element we want to animate
 const elem = document.querySelector('#my-elem');
 const scrollSource = document.scrollingElement;
 const timeRange = 1000;
@@ -39,7 +37,7 @@ new WorkletAnimation(
   scrollTimeline,
   {},
 ).play();`,
-    worklet: `registerAnimator('sample-animator', class {
+  worklet: `registerAnimator('sample-animator', class {
   constructor(options) {
     // Called when a new animator is instantiated
     // Used to set stuff up for each use of an animator
@@ -53,5 +51,4 @@ new WorkletAnimation(
     effect.localTime = currentTime;
   }
 });`
-  }
 };

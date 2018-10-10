@@ -17,22 +17,34 @@ const worklets = ['layout', 'paint', 'animation'];
 const isWorklet = (type) => worklets.includes(type);
 
 export default class {
-  constructor(target, options) {
+  constructor(target, editorConfig) {
+    if (Array.isArray(editorConfig)) {
+      this.editorKeys = editorConfig.map(({ name }) => name);
+      this.active = this.editorKeys[0];
+      this.type = editorConfig[0].type;
+    } else {
+      this.editorKeys = [];
+      this.type = editorConfig.type;
+    }
+
     this.target = target;
     this.parent = document.querySelector(target) ;
-    this.options = options;
-    this.optKeys = Object.keys(options);
-    this.type = options[this.optKeys[0]].type;
+    this.editorConfig = editorConfig;
     this.inputEvent = new Event(`input`, {
       bubbles: true,
       cancelable: true,
     });
-    this.active = this.optKeys[0];
+    
     this.repl = {};
-
     this.switcherOptions = ['worklet', 'js', 'css', 'html'];
 
     this.buildREPL();
+  }
+
+  getActive() {
+    return this.active
+      ? this.editorConfig.find(({ name }) => this.active)
+      : this.editorConfig;
   }
 
   buildREPL() {
@@ -41,7 +53,6 @@ export default class {
 
     const replSwitcher = document.createElement('select');
     const replTitle = document.createElement('h4');
-    const replFeatures = document.createElement('p');
 
     const workletEditor = document.createElement('div');
     const jsEditor = document.createElement('div');
@@ -56,7 +67,6 @@ export default class {
 
     menu.classList.add('repl--menu');
     replTitle.classList.add('repl--title');
-    replFeatures.classList.add('repl--features');
     replSwitcher.classList.add('repl--switcher');
     workletEditor.classList.add('repl--editor');
     workletEditor.setAttribute('data-language', 'worklet');
@@ -70,8 +80,8 @@ export default class {
     // Build Menu
     const menuItems = {};
 
-    if (this.optKeys.length > 1) {
-      for (const key of this.optKeys) {
+    if (this.editorKeys.length > 1) {
+      for (const key of this.editorKeys) {
         menuItems[key] = document.createElement('button');
         menuItems[key].classList.add('repl--menu-item');
         menuItems[key].setAttribute('data-type', key);
@@ -82,11 +92,11 @@ export default class {
     }
 
     // Worklet Edits
-    const selected = this.options[this.active].selectedEditor;
+    const selectedEditor = this.getActive().selectedEditor;
     if (isWorklet(this.type)) {
       workletEditor.style.zIndex = 100;
-    } else if (selected && editorElmnts[selected]) {
-      editorElmnts[selected].style.zIndex = 100;
+    } else if (selectedEditor && editorElmnts[selectedEditor]) {
+      editorElmnts[selectedEditor].style.zIndex = 100;
       this.switcherOptions.shift();
     } else {
       jsEditor.style.zIndex = 100;
@@ -96,7 +106,7 @@ export default class {
     // Build Switcher
     for (const key of this.switcherOptions) {
       const so = document.createElement('option');
-      so.selected = selected === key;
+      so.selected = selectedEditor === key;
       so.value = key;
       so.text = key;
       replSwitcher.appendChild(so);
@@ -108,7 +118,6 @@ export default class {
     this.parent.classList.add('repl');
     this.parent.appendChild(menu);
     this.parent.appendChild(replTitle);
-    this.parent.appendChild(replFeatures);
     this.parent.appendChild(replSwitcher);
     if (isWorklet(this.type)) {
       this.parent.appendChild(workletEditor);
@@ -137,19 +146,17 @@ export default class {
     this.repl.editors = editors;
     this.repl.switcher = replSwitcher;
     this.repl.title = replTitle;
-    this.repl.features = replFeatures;
     this.repl.menu = this.parent.querySelectorAll('.repl--menu-item');
     this.repl.previous = null;
 
-    this.resetEditors(this.active);
+    this.resetEditors();
   }
 
   resetEditors(base) {
-    const selected = this.options[base];
-    this.showConsole = selected.console || false;
+    const selectedEditor = this.getActive();
+    this.showConsole = selectedEditor.console || false;
 
-    this.repl.title.innerText = selected.name;
-    this.repl.features.innerText = selected.features.join(', ');
+    this.repl.title.innerText = selectedEditor.name;
 
     // Set the active menu item
     for (const menuItem of this.repl.menu) {
@@ -162,9 +169,9 @@ export default class {
 
     let activateKey = '';
 
-    for (const key in selected) {
+    for (const key in selectedEditor) {
       if (this.repl.editors[key]) {
-        this.repl.editors[key].value = selected[key];
+        this.repl.editors[key].value = selectedEditor[key];
         this.repl.editors[key].addEventListener('input', this.replPreview());
         this.repl.editors[key].dispatchEvent(this.inputEvent);
       }
@@ -196,10 +203,10 @@ export default class {
 
       self.resetEditors(switchType);
 
-      if (self.type !== 'props') {
+      if (isWorklet(self.type)) {
         self.repl.switcher.value = 'worklet';
       } else {
-        self.repl.switcher.value = 'js';
+        self.repl.switcher.value = self.getActive().selectedEditor || 'js';
       }
 
       self.repl.switcher.dispatchEvent(self.inputEvent);
@@ -254,10 +261,7 @@ pre.console code {
       html += `${vals.html}`;
       html += `</body>`;
 
-      // Only include JS directly if we're doing Custom Properties
-      if (type === 'props') {
-        html += `<script type="text/javascript">${getJS()}</script></head>`;
-      } else if (isWorklet(type)) {
+      if (isWorklet(type)) {
         html += `<script language="worklet">
             ${vals.worklet}
           </script>

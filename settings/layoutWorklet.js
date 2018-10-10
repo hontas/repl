@@ -1,10 +1,8 @@
 export default {
-  animation: {
-    type: 'layout',
-    console: true,
-    name: 'LayoutWorklet',
-    features: [],
-    html: `<div>1 Lorem ipsum dolor sit amet, consul disputando ne his, et vim accumsan ponderum. </div>
+  type: 'layout',
+  console: true,
+  name: 'LayoutWorklet',
+  html: `<div>1 Lorem ipsum dolor sit amet, consul disputando ne his, et vim accumsan ponderum. </div>
 
 <div>2 Lorem ipsum dolor sit amet, consul disputando ne his, et vim accumsan ponderum. Rebum deseruisse ex vix. Vix stet honestatis definitionem an, et natum ocurreret cum, semper interpretaris cu mea. Eam saperet fierent luptatum no. Ius ei dicunt detracto elaboraret. Rebum deseruisse ex vix. Vix stet honestatis definitionem an, et natum ocurreret cum, semper interpretaris cu mea. Eam saperet fierent luptatum no. Ius ei dicunt detracto elaboraret</div>
 
@@ -21,7 +19,7 @@ export default {
 <div>8 Lorem ipsum dolor sit amet, consul disputando ne his, et vim accumsan ponderum. Rebum deseruisse ex vix. Vix stet honestatis definitionem an, et natum ocurreret cum, semper interpretaris cu mea. Eam saperet fierent luptatum no. Ius ei dicunt detracto elaboraret.</div>
 
 <div>9 Lorem ipsum dolor sit amet, consul disputando ne his, et vim accumsan ponderum. Rebum deseruisse ex vix. Vix stet honestatis definitionem an, et natum ocurreret cum, semper interpretaris cu mea. Eam saperet fierent luptatum no. Ius ei dicunt detracto elaboraret.</div>`,
-    css: `body {
+  css: `body {
   display: layout(masonry);
   --padding: 10;
   --columns: 3;
@@ -38,7 +36,7 @@ div {
 div::first-letter {
   font-size: 200%;
 }`,
-    js: `CSS.registerProperty({
+  js: `CSS.registerProperty({
   name: '--padding',
   syntax: '<number>',
   inherits: false,
@@ -51,7 +49,7 @@ CSS.registerProperty({
   inherits: false,
   initialValue: 'auto',
 });`,
-    worklet: `// From https://github.com/GoogleChromeLabs/houdini-samples
+  worklet: `// From https://github.com/GoogleChromeLabs/houdini-samples
 
 registerLayout('masonry', class {
   static get inputProperties() {
@@ -112,5 +110,4 @@ registerLayout('masonry', class {
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */`
-  }
 };
