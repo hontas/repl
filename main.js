@@ -16,16 +16,19 @@ const settings = {
   layoutWorklet
 };
 
+const search = new URL(location).searchParams;
+const setting = search.get('setting');
+const type = search.get('type');
+
 const empty = {
-  'empty': {
-    console: true,
-    js: ``,
-    css: ``,
-    html: ``
-  }
+  console: true,
+  js: ``,
+  css: ``,
+  html: ``,
+  worklet: ``,
+  type
 };
 
-const setting = new URL(location).searchParams.get('setting');
 if (!setting || !settings[setting]) {
   console.warn(`?setting=${setting} is NOT valid. Must be one of: "${Object.keys(settings)}"`);
 }
