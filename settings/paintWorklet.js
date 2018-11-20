@@ -14,12 +14,13 @@ CSS.registerProperty({
   syntax: '<length>',
   initialValue: '0px'
 });
-CSS.registerProperty({
-  name: '--tooltip-border-width',
-  inherits: false,
-  syntax: '<length>',
-  initialValue: '0px'
-});
+
+
+
+
+
+
+
 
 
 // controls
