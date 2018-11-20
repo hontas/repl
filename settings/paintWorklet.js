@@ -59,30 +59,30 @@ label {
   display: block;
 }`,
   worklet: `registerPaint('tooltip', class {
-static get inputProperties() {
-  return [
-    'background-color',
-    '--tooltip-position',
-    '--tooltip-size'
-  ];
-}
+  static get inputProperties() {
+    return [
+      'background-color',
+      '--tooltip-position',
+      '--tooltip-size'
+    ];
+  }
 
-paint(ctx, geom, styleMap) {
-  const color = styleMap.get('background-color').toString();
-  const positionPercent = styleMap.get('--tooltip-position').value;
-  const position = geom.width * positionPercent / 100;
-  const size = styleMap.get('--tooltip-size').value;
+  paint(ctx, geom, styleMap) {
+    const color = styleMap.get('background-color').toString();
+    const positionPercent = styleMap.get('--tooltip-position').value;
+    const position = geom.width * positionPercent / 100;
+    const size = styleMap.get('--tooltip-size').value;
 
-  ctx.beginPath();
-  ctx.moveTo(position - size, 0);
-  ctx.lineTo(position + size, 0);
-  ctx.lineTo(position, geom.height);
-  ctx.closePath();
+    ctx.beginPath();
+    ctx.moveTo(position - size, 0);
+    ctx.lineTo(position + size, 0);
+    ctx.lineTo(position, geom.height);
+    ctx.closePath();
 
-  // fill
-  ctx.fillStyle = color;
-  ctx.fill();
-}
+    // fill
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
 })`,
   html: `<div class="tooltip">I'm a tooltip</div>
 
